@@ -1,0 +1,9 @@
+./vendor/bin/doctrine-module orm:info
+
+./vendor/bin/doctrine-module orm:validate-schema
+
+./vendor/bin/doctrine-module orm:schema-tool:update --force
+
+./vendor/bin/doctrine-module orm:convert-mapping --namespace="Inventory\\Entity\\" --force  --from-database annotation ./module/Inventory/src/
+
+./vendor/bin/doctrine-module orm:generate-entities ./module/Inventory/src/ --generate-annotations=true

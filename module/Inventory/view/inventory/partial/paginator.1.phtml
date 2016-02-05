@@ -1,0 +1,67 @@
+<?php if ($this->pageCount): ?>
+         <ul class="pagination pagination-sm no-margin pull-right">
+             <!-- Previous page link -->
+             <?php if (isset($this->previous)): ?>
+                 <li>
+                     <a id="<?php echo $this->w_id; ?>" href="<?php echo $this->url($this->route, array('action' => 'test1', 'id' => $page)); ?>">
+                         <<
+                     </a>
+                 </li>
+             <?php else: ?>
+                 <li class="disabled">
+                     <a id="<?php echo $this->w_id; ?>" href="#">
+                         «
+                     </a>
+                 </li>
+             <?php endif; ?>
+
+             <!-- Numbered page links -->
+             <?php foreach ($this->pagesInRange as $page): ?>
+                 <?php if ($page != $this->current): ?>
+                     <li>
+                         <a id="<?php echo $this->w_id; ?>" href="<?php echo $this->url($this->route, array('action' => 'test1', 'id' => $page));?>">
+                             <?php echo $page; ?>
+                         </a>
+                     </li>
+                 <?php else: ?>
+                     <li class="active">
+                         <a id="<?php echo $this->w_id; ?>" href="#"><?php echo $page; ?></a>
+                     </li>
+                 <?php endif; ?>
+             <?php endforeach; ?>
+
+             <!-- Next page link -->
+             <?php if (isset($this->next)): ?>
+                 <li>
+                     <a id="<?php echo $this->w_id; ?>" href="<?php echo $this->url($this->route, array('action' => 'test1', 'id' => $page)); ?>">
+                         >>
+                     </a>
+                 </li>
+             <?php else: ?>
+                 <li class="disabled">
+                     <a id="<?php echo $this->w_id; ?>" href="#">
+                         »
+                     </a>
+                 </li>
+             <?php endif; ?>
+         </ul>
+         <?php 
+         if ($this->is_xmlhttprequest == 1)
+            echo '<script>
+                     $(function(){
+                        $("li #'.$this->w_id.'").click(function(event) {
+                            var $element = $(this);
+                            var myRef = $element.attr("href");
+                            var myObject = $element.closest(".box-body");
+                            if (myObject !== null) {
+                                event.preventDefault();
+                                if (myRef != "#") {
+                                    $(myObject).load(myRef);
+                                }
+                            }
+                        })
+                    });
+                    </script>';
+         ?>
+         
+ <?php endif; ?>

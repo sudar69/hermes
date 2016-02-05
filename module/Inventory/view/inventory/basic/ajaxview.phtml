@@ -1,0 +1,104 @@
+<?php
+$myRoute = $this->getHelperPluginManager()->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
+  if ($this->is_xmlhttprequest == 0) {
+    echo '<div class="box box-info">
+    <div class="box-header">
+      <h3 class="box-title">Добавить новый</h3>
+    </div>
+    <div class="box-body">';
+  }
+?>
+
+
+<?php
+$form = $this->form;
+$form->prepare();
+// Assuming the "contact/process" route exists...
+//$form->setAttribute('action', $this->url('csn-cms/default', array('controller' => 'comment', 'action' => 'add'), true)); //'contact/process'));
+// or
+// $form->setAttribute('action', $this->url('grace-drops/default', array('controller' => 'translation', 'action' => 'add', 'id' => $this->id))); //'contact/process'));
+
+// Set the method attribute for the form
+$form->setAttribute('method', 'post');
+
+if ($this->mode == 'view') {
+    foreach ($form->getElements() as $element){
+        $element->setAttribute('style', 'border: none; outline: none; background-color: rgba(255,255,255,0.15); cursor: auto;');
+    }
+}
+
+echo $this->form()->openTag($form);
+if ($this->mode == 'view') {
+  echo '<fieldset disabled>';
+}
+//echo $this->formCollection($form);
+
+foreach ( $form as $element ) :
+echo '<div class="form-group">'.$this->formRow($element).'</div>';
+endforeach;
+if ($this->mode == 'view') {
+  echo '</fieldset>';
+}
+echo $this->form()->closeTag(); ?>
+
+
+
+<?php
+  if ($this->is_xmlhttprequest == 0) {
+    echo '    </div>
+    <!-- /.box-body -->
+</div>';
+}
+?>
+<script>
+  $(function(){
+    $("form#<?php echo $form->getName(); ?>").submit(function(){
+         
+        //if not call by ajax
+        //submit to showformAction
+        if ('<?php echo $this->is_xmlhttprequest; ?>' == 0) 
+            return true;
+        //if by ajax
+        //check by ajax : validatepostajaxAction
+        var progress = $(this).parent().find(".progress");
+        $(progress).show();
+        $.post("<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'validateajaxadd', 'id'=>$this->id)); ?>",
+               $("form#<?php echo $form->getName(); ?>").serialize(), function(itemJson){
+                 
+                var error = false;
+                 
+                if (itemJson.name != undefined){
+                     
+                    if ($(".element_name ul").length == 0){
+                        //prepare ...
+                        $(".element_name").append("<ul></ul>");
+                    }
+                     
+                    for(var i=0;i<itemJson.name.length;i++)
+                    {
+                       if ($(".element_name ul").html().substr(itemJson.name[i]) == '')
+                            $(".element_name ul").append('<li>'+itemJson.name[i]+'</li>');
+                    }
+                     
+                    error = true;
+                }
+                 
+                if (!error){
+                    if (itemJson.success == 1){
+                        var myRef = "<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'ajaxview', 'id'=>$this->id)); ?>";
+                        var myObject = $("#ajaxview");
+                        if (myObject !== null) {
+                            myObject.parent().append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                            $(myObject).load(myRef, function() {
+                             myObject.parent().find(".overlay").remove();
+                            });
+                        }
+                    }
+                }
+                 
+        }, 'json');
+         
+        return false;
+    });
+});  
+</script>

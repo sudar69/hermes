@@ -1,0 +1,67 @@
+<?php
+$myRoute = $this->getHelperPluginManager()->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
+$entity_route = $this->getHelperPluginManager()->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch()->getParams()['entity'];
+?>
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <a href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'index', 'id'=>$this->id)); ?>"><?php echo $this->pagename; ?></a>
+        <small>Version 2.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <?php echo $this->pagebread; ?>
+      </ol>
+        <div class="row">
+            <div class="col-xs-12">Tools</div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+    <!-- View widget -->
+    <div class="row">
+      <div class="col-md-12">
+        <div id="area" class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Loading state</h3>
+            <?php if($this->isAllowed( 'controller/Inventory\Controller\Departments:ajaxedit'))  ?>
+            <a id="ajaxedit" href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'ajaxedit', 'id'=>$this->id)); ?>" 
+                class="pull-right"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>
+            <?php ; ?>
+          </div>
+          <div id="ajaxview" class="box-body">
+            The body of the box
+          </div>
+          <!-- /.box-body -->
+          <!-- Loading (remove the following to stop the loading)-->
+          <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <!-- end loading -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+    <script>
+        $("#ajaxview").load("<?php echo $this->url($myRoute, array('action'=>'ajaxview', 'controller'=>$myRoute, 'id'=>$this->id)); ?>", function() {
+         $("#ajaxview").parent().find(".overlay").remove();
+        });
+
+        $("#ajaxedit").click(function(event) {
+            var $element = $(this);
+            var myRef = $element.attr("href");
+            var myObject = $element.closest(".box").find(".box-body");
+            if (myObject !== null) {
+                event.preventDefault();
+                if (myRef != "#") {
+                    //$(myObject).load(myRef);
+                    myObject.parent().append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    $(myObject).load(myRef, function() {
+                     myObject.parent().find(".overlay").remove();
+                    });
+                }
+            }
+        });
+    </script>
+    <!-- /.View widget -->
+    </section>
+    <!-- /.content -->

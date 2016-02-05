@@ -1,0 +1,96 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
+  
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href="#">Profile</a></li>
+  <li role="presentation"><a href="#">Messages</a></li>
+</ul>
+
+<div class="btn-group" role="group" aria-label="Basic example">
+    <a  class="btn btn-default" href="<?php echo $this->url('inventory', array('controller'=>'inventory','action'=>'add')); ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить</a>
+	<a data-toggle="modal" class="btn btn-default" href="<?php echo $this->url('inventory', array('controller'=>'inventory','action'=>'add')); ?>" data-target="#myModal1">Click me !</a>
+
+  <button type="button" class="btn btn-default">Left</button>
+  <button type="button" class="btn btn-default">Middle</button>
+  <button type="button" class="btn btn-default">Right</button>
+</div>
+<div>
+    <table id="datatable_ajax"></table>
+</div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Data Table With Full Features</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+            <tr>
+                <th>Id</th>
+                <th>Наименование</th>
+                <th>Активность</th>
+                <th>Тип подключения</th>
+                <th>Тип подключения</th>
+            </tr>
+        </thead>
+ 
+        <tfoot>
+            <tr>
+                <th>Id</th>
+                <th>dispname</th>
+                <th>active</th>
+                <th>connecttype</th>
+                <th>Тип подключения</th>
+            </tr>
+        </tfoot>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+<script>
+$(document).ready(function() {
+    var table = $("#example1").DataTable({
+        "ajax": "<?php echo $this->url('inventory', array('controller'=>'inventory','action'=>'json')); ?>",
+        /*"columnDefs": [ {
+            "targets": 1,
+            "mRender": function ( data, type, full ) {
+                     return '<a href="foo.php?id='+ data +'">'+ data + '</a>';
+                   }
+        } ],*/
+        "columns": [
+            { "data": "id" },
+            { "data": "dispname" },
+            { "data": "active" },
+            { "data": "connecttype" },
+            { "data": "priority" }
+        ],
+        "fnRowCallback": function( Row, Data, iDisplayIndex ) {
+            var s = "<?php echo $this->url('inventory', array('controller'=>'inventory','action'=>'view')); ?>";
+            $('td:eq(0)', Row).html('<a href="' + s + '/' +Data.id + '">' +
+                Data.dispname + '</a>');
+            return Row;
+        },
+         "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+            }
+        ],
+    });
+    
+  });
+</script>

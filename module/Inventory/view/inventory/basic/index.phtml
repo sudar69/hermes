@@ -1,0 +1,168 @@
+<?php
+$myRoute = $this->getHelperPluginManager()->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
+$entity_route = $this->getHelperPluginManager()->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch()->getParams()['entity'];
+?>
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <?php echo $this->pagename; ?>
+        <small>Version 2.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <?php echo $this->pagebread; ?>
+      </ol>
+        <div class="row">
+            <div class="col-xs-12">Tools</div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+    
+    <!-- Table widget -->
+    <div class="row">
+      <div class="col-md-12">
+        <div id="area" class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Loading state</h3>
+            <a href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'ajaxadd', 'id'=>$this->id)); ?>" 
+                class="pull-right"  data-toggle="modal" data-target="#ajaxadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить</a>
+          </div>
+          <div id="ajaxtable" class="box-body">
+            The body of the box
+          </div>
+          <!-- /.box-body -->
+          <!-- Loading (remove the following to stop the loading)-->
+          <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <!-- end loading -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="ajaxadd" tabindex="-1" role="dialog" aria-labelledby="myAjaxaddLabel"></div>
+    <script>
+        $("#ajaxtable").load("<?php echo $this->url($myRoute, array('action'=>'ajaxtable', 'controller'=>$myRoute, 'id'=>$this->id, array('query' => array('page' => $page)))); ?>", function() {
+         $("#ajaxtable").parent().find(".overlay").remove();
+        });
+    </script>
+    <!-- /.Table widget -->
+
+    <!-- View widget -->
+    <div class="row">
+      <div class="col-md-12">
+        <div id="area" class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Loading state</h3>
+            <a id="ajaxedit" href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'action'=>'ajaxedit', 'id'=>$this->id)); ?>" 
+                class="pull-right"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>
+          </div>
+          <div id="ajaxview" class="box-body">
+            The body of the box
+          </div>
+          <!-- /.box-body -->
+          <!-- Loading (remove the following to stop the loading)-->
+          <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <!-- end loading -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+    <script>
+        $("#ajaxview").load("<?php echo $this->url($myRoute, array('action'=>'ajaxview', 'controller'=>$myRoute, 'id'=>$this->id)); ?>", function() {
+         $("#ajaxview").parent().find(".overlay").remove();
+        });
+
+        $("#ajaxedit").click(function(event) {
+            var $element = $(this);
+            var myRef = $element.attr("href");
+            var myObject = $element.closest(".box").find(".box-body");
+            if (myObject !== null) {
+                event.preventDefault();
+                if (myRef != "#") {
+                    //$(myObject).load(myRef);
+                    myObject.parent().append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    $(myObject).load(myRef, function() {
+                     myObject.parent().find(".overlay").remove();
+                    });
+                }
+            }
+        });
+    </script>
+    <!-- /.View widget -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="row">
+                  <div class="col-xs-6"><h3 class="box-title">Data Table With Full Features</h3></div>
+                  <div class="col-xs-6 text-right">
+                      <a  class="btn btn-default btn-sm" style="border-radius: 25px!important;" href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'entity' => $entity_route,'action'=>'add', 'id' => $this->id)); ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить</a>
+                      <a  class="btn btn-default btn-sm" style="border-radius: 25px!important;" href="<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'entity' => $entity_route,'action'=>'view', 'id' => $this->id)); ?>"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Параметры</a>
+                  </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <?php foreach ($this->index as $key => $data_) { ?>
+                            <th><?php echo $key; ?></th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+ 
+                <tfoot>
+                    <tr>
+                        <?php foreach ($this->index as $key => $data_) { ?>
+                            <th><?php echo $key; ?></th>
+                        <?php } ?>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+<script>
+$(document).ready(function() {
+    var table = $("#example1").DataTable({
+        "ajax": "<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'entity' => $entity_route,'action'=>'json', 'id' => $this->id)); ?>",
+        "columns": [
+            <?php foreach ($this->index as $key => $data_) { 
+                if ($data_ == "id") {
+                    echo '{ "data": "'.$data_.'" }';
+                } else {
+                    echo ',{ "data": "'.$data_.'" }';
+                }
+                
+            } ?>
+        ],
+        "fnRowCallback": function( Row, Data, iDisplayIndex ) {
+            var s = "<?php echo $this->url($myRoute, array('controller'=>$myRoute, 'entity' => $entity_route,'action'=>'index')); ?>";
+            $('td:eq(0)', Row).html('<a href="' + s + '/' +Data.id + '">' +
+                <?php echo $this->myname ?> + '</a>');
+            return Row;
+        },
+         "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+            }
+        ],
+    });
+    
+  });
+</script>
+</section>
+    <!-- /.content -->

@@ -1,0 +1,44 @@
+<div class="box box-info">
+    <div class="box-header">
+      <h3 class="box-title">Параметры</h3>
+    </div>
+    <div class="box-body">
+
+<?php
+$form = $this->form;
+$form->prepare();
+// Assuming the "contact/process" route exists...
+//$form->setAttribute('action', $this->url('csn-cms/default', array('controller' => 'comment', 'action' => 'add'), true)); //'contact/process'));
+// or
+// $form->setAttribute('action', $this->url('grace-drops/default', array('controller' => 'translation', 'action' => 'add', 'id' => $this->id))); //'contact/process'));
+
+// Set the method attribute for the form
+$form->setAttribute('method', 'post');
+
+echo $this->form(null,\TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL)->openTag($form);
+echo $this->formCollection($form);
+echo $this->form()->closeTag(); ?>
+
+
+<?php
+$form = $this->form;
+$form->prepare ();
+
+echo $this->form (null,\TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL)->openTag ( $form );
+foreach ( $form as $element ) :
+?>
+    <div class="form-group " >
+        <label class="col-sm-2 control-label"><?php echo $element->getLabel() ?>:</label>
+        <div class="col-sm-10" >
+            <p><?php echo $element->getValue();?></p>
+        </div>
+    </div>
+<?php
+endforeach;
+echo $this->form ()->closeTag ( $form );
+?>
+
+    </div>
+    <!-- /.box-body -->
+</div>
+

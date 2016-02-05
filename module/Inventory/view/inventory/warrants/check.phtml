@@ -1,0 +1,31 @@
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Data Table With Full Features</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                  <form method="post" name="deka_warrants" class="form-horizontal" id="deka_warrants">
+                  <table class="table table-striped text-left">
+                  <?php foreach ($data as $key => $value) : ?>
+                  <tr>
+                      <?php if ($key == 0) {echo "<th>&nbsp;</th>";} ?>
+                      <?php foreach ($value as $value2) : ?>
+                          <?php if ($key == 0) {echo "<th class='text-center'>$value2</th>";} else {echo "<td>$value2</td>";} ?>
+                      <?php endforeach; ?>
+                  </tr>
+                  <?php endforeach; ?>
+                  </table>
+                  <button name="send" type="submit" class="btn btn-default" value="Сохранить">Сохранить</button>
+                  </form>
+                  </div>
+                  </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->

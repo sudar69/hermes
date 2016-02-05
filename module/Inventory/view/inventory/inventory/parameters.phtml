@@ -1,0 +1,28 @@
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="#">Home</a></li>
+  <li role="presentation" class="active"><a href="#">Parameters</a></li>
+  <li role="presentation"><a href="#">Messages</a></li>
+</ul>
+<table class="table table-hover">
+	<tr>
+		<th>Свойство</th>
+		<th>Значение</th>
+	</tr>
+<?php foreach ($datas as $data) { ?>
+	<tr>
+		<td><?php //echo $data['attribute'];?></td>
+		<td><?php //echo $data['value'];?></td>
+	</tr>
+<?php } ?>
+</table>
+<?php
+$form = $this->form;
+foreach ($form as $d_) {
+$d_->prepare();
+$d_->setAttribute('method', 'post');
+}
+echo $this->form()->openTag($form[0]);
+foreach ($form as $d_) {
+echo $this->formCollection($d_);
+}
+echo $this->form()->closeTag();

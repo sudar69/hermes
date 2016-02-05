@@ -1,0 +1,81 @@
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Test
+        <small>Version 2.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+        <div class="row">
+            <div class="col-xs-12">
+                
+                </div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+    
+    <div class="row">
+      <div class="col-md-3">
+        <div id="area" class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Loading state</h3>
+          </div>
+          <div id="area" class="box-body">
+            The body of the box
+          </div>
+          <!-- /.box-body -->
+          <!-- Loading (remove the following to stop the loading)-->
+          <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <!-- end loading -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div id="area" class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Loading state</h3>
+          </div>
+          <div id="area1" class="box-body">
+            The body of the box
+          </div>
+          <!-- /.box-body -->
+          <!-- Loading (remove the following to stop the loading)-->
+          <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <!-- end loading -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>    
+    
+    </section>
+    <!-- /.content -->
+<script>
+    $("#area").load("<?php echo $this->url('demo', array('action'=>'test', 'controller'=>'demo')); ?>", function() {
+     $("#area").parent().find(".overlay").remove();
+    });
+    $("#area1").load("<?php echo $this->url('demo', array('action'=>'test1', 'controller'=>'demo')); ?>", function() {
+     $("#area1").parent().find(".overlay").remove();
+    });
+    
+     
+    $(function(){
+      $("li #mypaginator").click(function(event) {
+          event.preventDefault();
+          alert("Мы не перешли по ссылке, а вывели своё сообщение!");
+      })
+    });
+
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
